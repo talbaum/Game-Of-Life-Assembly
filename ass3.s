@@ -9,7 +9,7 @@
         extern scheduler, printer ,cell
         extern cellRunner
 
-        ;; /usr/include/asm/unistd_32.h
+   
 sys_exit:       equ   1
 sys_lseek:      equ   19
 sys_write:      equ   4
@@ -50,10 +50,8 @@ section .data
         db "" , 10 ,0   
     ; --------------------------------------------- macros ----------------------------------------------- ;   
     
-  %macro printinputMatrix 0       ;https://www.tutorialspoint.com/assembly_programming/assembly_file_management.htm;
+  %macro printinputMatrix 0      
     
-  
-;mov esi,FileName
    mov eax, 5
    mov ebx, [hexaNameBuffer]
    mov ecx, 0             ;for read only access
@@ -76,7 +74,6 @@ section .data
     add ebx, eax
     mov esi, 0
     zeroLoop:
-        
         cmp esi, dword[MatrixSize]
         je doneCopy
         
@@ -102,11 +99,6 @@ section .data
             mov eax, 1
             add ebx, eax    ;increase info print iterator
             mov edi, ebx
-           ; mov byte[edi], ' '
-            ;mov ebx , edi
-           ; mov eax, 1
-           ; add ebx, eax
-           ; mov edi, ebx
             pop ebx
             inc esi
             jmp zeroLoop
@@ -115,7 +107,7 @@ section .data
             mov eax, 1
             add ecx, eax
 
- 			mov byte[ebx], '1'   ;for state
+ 		mov byte[ebx], '1'   ;for state
             mov eax, 1           ;increase state iterator
             add ebx, eax
 
@@ -125,11 +117,6 @@ section .data
             mov eax, 1
             add ebx, eax    
             mov edi, ebx
-            ;mov byte[edi], ' '
-            ;mov ebx , edi
-           ; mov eax, 1
-           ; add ebx, eax    
-           ; mov edi, ebx
             pop ebx            
             inc esi
             jmp zeroLoop
@@ -172,8 +159,7 @@ section .data
         push debug_dRow_string
         push  stdout
         push  sys_write
-        CALL system_call
-		
+        CALL system_call	
 
      popad
 %endmacro
@@ -232,8 +218,6 @@ section .data
         newLine 
     print_Debug_K:
      pushad
-        ;mov esi, dword[K]
-        ;push esi
         push 16
         push debug_K_string
         push stdout
@@ -309,8 +293,7 @@ section .data
 	%macro matrixToState 0
 	    
             pushad
-          
-;mov esi,FileName
+
    mov eax, 5
    mov ebx, [hexaNameBuffer]
    mov ecx, 0             ;for read only access
@@ -332,8 +315,6 @@ section .data
     add ebx, eax
     mov esi, 0
     zeroLoop1:
-        
-		
         cmp esi, dword[MatrixSize]
         je doneCopy1
         
@@ -357,7 +338,7 @@ section .data
         one1:
             mov eax, 1
             add ecx, eax
- 			mov byte[ebx], '1'   ;for state
+ 	    mov byte[ebx], '1'   ;for state
             mov eax, 1           ;increase state iterator
             add ebx, eax                 
             inc esi
@@ -374,15 +355,8 @@ section .data
    mov eax, 6
    mov ebx, [fd_in]
    int 0x80
-	   popad
-	   
-	   
-	
+	   popad	
   %endmacro	
-	
-	
-	
-	
 	
 	
     %macro args7 0
@@ -392,7 +366,7 @@ section .data
 
 	
         mov edi, dword [esp + 4 * 4]                            ; length
-		mov dword[LengthAsString], edi
+	mov dword[LengthAsString], edi
         push edi
         call atoi
         add esp,4
@@ -403,16 +377,16 @@ section .data
 
 
         mov edi, dword [esp + 4 * 5]                        ; width
-		mov dword[WidthAsString], edi
+	mov dword[WidthAsString], edi
         push edi
         call atoi
         add esp,4
         mov dword[WorldWidth],eax
         xor eax,eax
-		xor edi,edi
+	xor edi,edi
             
         mov     edi, dword [esp + 4 * 6]                    ; t
-		mov dword[TAsString], edi
+	mov dword[TAsString], edi
         push edi
         call atoi
         add esp,4
@@ -420,8 +394,8 @@ section .data
         xor eax,eax
         xor edi,edi
 
-        mov     edi, dword [esp + 4 * 7]                    ; k
-		mov dword[KAsString], edi
+        mov edi, dword [esp + 4 * 7]                    ; k
+	mov dword[KAsString], edi
         push edi
         call atoi
         add esp,4
@@ -508,15 +482,11 @@ _mystrlen:
  
     push ebp
     mov ebp, esp
-
     mov edx, [ebp+8]    ; the string
     xor eax, eax        ; loop counter
-
     jmp if
-
 then:
     inc eax
-
 if:
     mov cl, [edx+eax]
     cmp cl, 0x0
@@ -537,7 +507,7 @@ section .bss
     info resb  10002 
     T resd 256
     K resd 256
-	LengthAsString  resd 3
+    LengthAsString  resd 3
     WidthAsString  resd 3
     TAsString resd 256
     KAsString resd 256
@@ -566,12 +536,12 @@ _start:
 
     args7Start:
         args7
-		pushad
-		mov eax, dword[WorldLength]
+	pushad
+	mov eax, dword[WorldLength]
         mov ebx, dword[WorldWidth]
         mul ebx
 	
-        mov dword[MatrixSize], eax
+       mov dword[MatrixSize], eax
        popad
        printDebug
         jmp codeStart
@@ -582,13 +552,11 @@ _start:
 		mov eax, dword[WorldLength]
         mov ebx, dword[WorldWidth]
         mul ebx
-	hi:
+	check:
         mov dword[MatrixSize], eax
        popad
-	   matrixToState
-            
- 
-        
+       matrixToState
+
     codeStart:
         enter 0, 0
 
@@ -611,7 +579,6 @@ _start:
 
 	cellInit:  
 		mov eax, dword[MatrixSize]
-		;dec eax
 		mov ebx, dword[counter]
 		cmp dword[counter],eax
 		je finishedInit
@@ -624,7 +591,6 @@ _start:
         mov esi, dword[i]
         mov edi, dword[j]
 		
-		romil:
 		mov edx, cellRunner 						; edx store the function of the coroutine.
 		call init_co
 		inc dword[counter]
