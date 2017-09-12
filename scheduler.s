@@ -17,13 +17,13 @@ scheduler:
         add edi,edi
         mov dword[T], edi
         mov dword[K],eax
-		pushad
-		mov eax, dword[WorldLength]
+	pushad
+	mov eax, dword[WorldLength]
         mov ebx, dword[WorldWidth]
         mul ebx	
-		inc eax
+	inc eax
         mov dword[matSz], eax
-		popad
+	popad
                                        
 next:
         mov edi,dword[matSz]
