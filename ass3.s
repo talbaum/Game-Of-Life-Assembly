@@ -29,11 +29,11 @@ section .data
         inputIterator dd 0
         MatrixSize dd 0
         ten: dd 10
-		lenOfLength dd 0
-		lenOfWidth dd 0
-		lenOfT dd 0
-		lenOfK dd 0
-		firstCell dd 0
+	lenOfLength dd 0
+	lenOfWidth dd 0
+	lenOfT dd 0
+	lenOfK dd 0
+	firstCell dd 0
         ; ------------------------------------------ Debug Strings ------------------------------------------------ ;
     debug_length_string:
         db "length="     
@@ -147,7 +147,7 @@ zeroLoop:
 
    newLine
    newLine
-    %endmacro
+   %endmacro
    
  %macro newLine 0 
         push  1
@@ -155,7 +155,7 @@ zeroLoop:
         push  stdout
         push  sys_write
         CALL system_call	
-     popad
+        popad
 %endmacro
    
      %macro printDebug 0
@@ -361,7 +361,7 @@ zeroLoop:
         xor eax,eax
 	xor edi,edi
             
-        mov     edi, dword [esp + 4 * 6]                    ; t
+        mov  edi, dword [esp + 4 * 6]                    ; t
 	mov dword[TAsString], edi
         push edi
         call atoi
@@ -482,14 +482,12 @@ section .bss
     WidthAsString  resd 3
     TAsString resd 256
     KAsString resd 256
-	
     Space resd 256
     hexaNameBuffer: resb 256 
     hexaTBuffer: resb 256
     hexaKBuffer: resb 256
     hexaLengthBuffer: resb 256
     hexaWidthBuffer:resb 256
-
     cors:   resd 100 * 100 + 2
 
    ; --------------------------------------------- end of functions ----------------------------------------------- ;
