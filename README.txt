@@ -1,0 +1,6 @@
+Simulating Conway's Game of Life (for those who are interested, the original game is described here). The program begins by reading the initial state configuration of the organisms managed by the co-routines, the number of generations to run, and the printing frequency (in steps).
+The program initializes an appropriate mechanism, and control is then passed to a scheduler co-routine which decides the appropriate scheduling for the co-routines. The states of the organisms managed by the co-routines, where co-routine is responsible for one organism, cell in the array. Every organism is a cell in 2 a dimensional array, so it has 8 neighbors (diagonal cells also count as neighbors). Life board is cyclic, it means that each cell in the last column has neighbors from the first column and vice versa. Each cell in the last row has neighbors from the first row and vice versa.
+
+The cell organisms change according to the following rules: if the cell is currently alive, then it will remain alive in the next generation if and only if exactly 2 or 3 of its neighbors are currently alive. Otherwise it dies. A dead cell remains dead in the next generation, unless it has exactly 3 living neighbors, in which case we say that an organism is born here.
+
+A specialized co-routine called the printer prints the organism states for all the cells as a two dimensional array.
