@@ -24,15 +24,11 @@ scheduler:
 		inc eax
         mov dword[matSz], eax
 		popad
-                                           ; --------- need to check how to use K and T from the stack --------
+                                       
 next:
         mov edi,dword[matSz]
         cmp dword [MatrixIterator],edi
         jg changeGenNum
-        ;mov edi , dword[K]
-	    ;mov eax,dword[genNum]
-        ;cmp dword[genNum],1
-        ;je printerTime
         
         mov edi,dword[K]
         cmp dword[printCount],edi
@@ -43,8 +39,7 @@ next:
    printerTime:
              mov dword[printCount],0
              mov ebx,1
-             call resume   
-             ;inc dword[MatrixIterator]      ;      --------- do we need to inc the genNum at print? ------------
+             call resume     
              jmp next
 
     cellTime:
