@@ -5,18 +5,17 @@
     global WorldLength 
     global WorldWidth
     global MatrixSize
-        extern init_co, start_co, resume
-        extern scheduler, printer ,cell
-        extern cellRunner
-
-   
+    extern init_co, start_co, resume
+    extern scheduler, printer ,cell
+    extern cellRunner
+    
 sys_exit:       equ   1
 sys_lseek:      equ   19
 sys_write:      equ   4
 stdout:         equ   1
 
 section .data
-    
+   
     ; --------------------------------------------- vars -------------------------------------------------- ;
         debug dd 0
         fileNameIterator dd 0
@@ -38,10 +37,8 @@ section .data
         ; ------------------------------------------ Debug Strings ------------------------------------------------ ;
     debug_length_string:
         db "length="     
-
     debug_width_string:
         db "width="    
-
     debug_T_string:
         db "number of generations="     
     debug_K_string:
@@ -50,14 +47,12 @@ section .data
         db "" , 10 ,0   
     ; --------------------------------------------- macros ----------------------------------------------- ;   
     
-  %macro printinputMatrix 0      
-    
+  %macro printinputMatrix 0       
    mov eax, 5
    mov ebx, [hexaNameBuffer]
    mov ecx, 0             ;for read only access
    mov edx, 0777          ;read, write and execute by all
    int  0x80
-    
    mov  [fd_in], eax
     
    ;read from file
@@ -73,19 +68,20 @@ section .data
     mov eax, 2           ;increase state iterator - we made space for schueduler printer
     add ebx, eax
     mov esi, 0
-    zeroLoop:
-        cmp esi, dword[MatrixSize]
-        je doneCopy
-        
-        mov dl ,byte[ecx]
-        cmp dl, ' ' 
-        je revah
-        mov dl ,byte[ecx]
-        cmp dl, 10
-        jne one
-        je sleshEn
-        
-        revah:
+    
+zeroLoop:
+    cmp esi, dword[MatrixSize]
+    je doneCopy
+     
+    mov dl ,byte[ecx]
+    cmp dl, ' ' 
+    je revah
+    mov dl ,byte[ecx]
+    cmp dl, 10
+    jne one
+    je sleshEn
+       
+ revah:
             mov eax, 1           ;increase info iterator
             add ecx, eax  
 
@@ -107,7 +103,7 @@ section .data
             mov eax, 1
             add ecx, eax
 
- 		mov byte[ebx], '1'   ;for state
+ 	    mov byte[ebx], '1'   ;for state
             mov eax, 1           ;increase state iterator
             add ebx, eax
 
@@ -152,23 +148,19 @@ section .data
    newLine
    newLine
     %endmacro
-    
-
+   
  %macro newLine 0 
         push  1
         push debug_dRow_string
         push  stdout
         push  sys_write
         CALL system_call	
-
      popad
 %endmacro
-    
- 
+   
      %macro printDebug 0
-     print_Debug_Length:
-     pushad
-
+  print_Debug_Length:
+        pushad
         push 7      
         push debug_length_string
         push stdout
@@ -181,11 +173,10 @@ section .data
         push  stdout
         push  sys_write
         CALL system_call
-    
         newLine
 
     print_Debug_Width:
-     pushad
+        pushad
         push 6
         push debug_width_string
         push stdout
@@ -197,11 +188,11 @@ section .data
         push esi
         push  stdout
         push  sys_write
-        CALL system_call
-            
-        newLine 
-    print_Debug_T:
-     pushad
+        CALL system_call   
+        newLine
+	
+   print_Debug_T:
+        pushad
         push 22
         push debug_T_string
         push stdout
@@ -213,41 +204,36 @@ section .data
         push esi
         push  stdout
         push  sys_write
-        CALL system_call
-        
+        CALL system_call 
         newLine 
-    print_Debug_K:
-     pushad
+	
+  print_Debug_K:
+        pushad
         push 16
         push debug_K_string
         push stdout
         push sys_write      
         CALL system_call
-        
-        
+       
         mov esi,  dword[KAsString]
         push  dword[lenOfK]
         push esi
         push  stdout
         push  sys_write
         CALL system_call
-        
         newLine
 
-     print_Debug_inputMatrix:
-     pushad
+   print_Debug_inputMatrix:
+         pushad
          printinputMatrix
-		 newLine
-     popad
+	 newLine
+	 popad
     %endmacro
-    
-    
-    
+
     %macro args6 0
     check1:
         mov edi, dword [esp + 4 * 2]                            ; fileName
         mov dword[hexaNameBuffer],edi
-
 
         mov edi, dword [esp + 4 * 3]                            ; length
         push edi
@@ -256,7 +242,6 @@ section .data
 		
         mov dword[WorldLength], eax
 
-  
         xor eax,eax
         xor edi,edi
 
@@ -266,8 +251,7 @@ section .data
         add esp,4
         mov dword[WorldWidth],eax
         xor eax,eax
-    
-            
+         
         mov     edi, dword [esp + 4 * 5]                    ; t
         push edi
         call atoi
@@ -284,23 +268,16 @@ section .data
         mov dword[K], eax
         xor eax,eax
         xor edi,edi
-      
-
     %endmacro
     
-	
-	
-	%macro matrixToState 0
-	    
-            pushad
-
-   mov eax, 5
-   mov ebx, [hexaNameBuffer]
-   mov ecx, 0             ;for read only access
-   mov edx, 0777          ;read, write and execute by all
-   int  0x80
-    
-   mov  [fd_in], eax
+    %macro matrixToState 0
+           pushad
+	   mov eax, 5
+	   mov ebx, [hexaNameBuffer]
+	   mov ecx, 0             ;for read only access
+	   mov edx, 0777          ;read, write and execute by all
+	   int  0x80
+   	   mov  [fd_in], eax
     
    ;read from file
    mov eax, 3
@@ -314,6 +291,7 @@ section .data
     mov eax, 2           ;increase state iterator - we made space for schueduler printer
     add ebx, eax
     mov esi, 0
+    
     zeroLoop1:
         cmp esi, dword[MatrixSize]
         je doneCopy1
@@ -355,7 +333,7 @@ section .data
    mov eax, 6
    mov ebx, [fd_in]
    int 0x80
-	   popad	
+   popad	
   %endmacro	
 	
 	
@@ -364,7 +342,6 @@ section .data
         mov edi, dword [esp + 4 * 3]                            ; fileName
         mov dword[hexaNameBuffer],edi
 
-	
         mov edi, dword [esp + 4 * 4]                            ; length
 	mov dword[LengthAsString], edi
         push edi
@@ -374,7 +351,6 @@ section .data
         mov dword[WorldLength], eax
         xor eax,eax
         xor edi,edi
-
 
         mov edi, dword [esp + 4 * 5]                        ; width
 	mov dword[WidthAsString], edi
@@ -403,30 +379,28 @@ section .data
         xor eax,eax
         xor edi,edi
         
-		push dword[LengthAsString]
-		call _mystrlen
-		add esp,4
-	
-		mov dword[lenOfLength], eax 
+	push dword[LengthAsString]
+	call _mystrlen
+	add esp,4
+	mov dword[lenOfLength], eax 
 
-		push dword[WidthAsString]
-		call _mystrlen
-		add esp,4
+	push dword[WidthAsString]
+	call _mystrlen
+	add esp,4
 	
-		mov dword[lenOfWidth], eax 		
+	mov dword[lenOfWidth], eax 		
 		
-		
-		push dword[TAsString]
-		call _mystrlen
-		add esp,4
+	push dword[TAsString]
+	call _mystrlen
+	add esp,4
 	
-		mov dword[lenOfT], eax 
+	mov dword[lenOfT], eax 
 		
-		push dword[KAsString]
-		call _mystrlen
-		add esp,4
+	push dword[KAsString]
+	call _mystrlen
+	add esp,4
 	
-		mov dword[lenOfK], eax 
+	mov dword[lenOfK], eax 
 		
     %endmacro
 
@@ -477,9 +451,7 @@ atoi_end:
         pop     ebp
         ret
 
-
 _mystrlen:
- 
     push ebp
     mov ebp, esp
     mov edx, [ebp+8]    ; the string
@@ -491,7 +463,6 @@ if:
     mov cl, [edx+eax]
     cmp cl, 0x0
     jne then
-
 end:
     pop ebp
     ret
@@ -534,7 +505,7 @@ _start:
         cmp ebx,7   
         jne bad_input
 
-    args7Start:
+args7Start:
         args7
 	pushad
 	mov eax, dword[WorldLength]
@@ -544,18 +515,18 @@ _start:
        mov dword[MatrixSize], eax
        popad
        printDebug
-        jmp codeStart
+       jmp codeStart
         
-    args6Start:
+args6Start:
 	args6
 	pushad
-		mov eax, dword[WorldLength]
+	mov eax, dword[WorldLength]
         mov ebx, dword[WorldWidth]
         mul ebx
 	check:
         mov dword[MatrixSize], eax
-       popad
-       matrixToState
+        popad
+        matrixToState
 
     codeStart:
         enter 0, 0
@@ -565,7 +536,7 @@ _start:
         mov ecx, [ebp + 4]      ; ecx = argc
         mov eax, dword[K]
         mov edi, dword[T]
-       call init_co            ; initialize scheduler state
+        call init_co            ; initialize scheduler state
 
         inc ebx                 ; printer i co-routine 1
         xor esi,esi
@@ -588,50 +559,47 @@ _start:
 		mov ebx, dword[counter]				; ebx store the index of the co routine.
 		inc ebx 							; we have the printer and scheduler , so each cell is at index counter+2 at the co routines indexes
 		inc ebx
-        mov esi, dword[i]
-        mov edi, dword[j]
+       		mov esi, dword[i]
+      		mov edi, dword[j]
 		
 		mov edx, cellRunner 						; edx store the function of the coroutine.
 		call init_co
 		inc dword[counter]
 		jmp cellInit
 
-finishedInit:
-        xor ebx, ebx            ; starting co-routine = scheduler
-      	call start_co           ; start co-routines
-
+	finishedInit:
+		xor ebx, ebx            ; starting co-routine = scheduler
+		call start_co           ; start co-routines
 
         ;; exit
-        mov eax, sys_exit
-        xor ebx, ebx
-        int 80h
+		mov eax, sys_exit
+		xor ebx, ebx
+		int 80h
 		
-
-		firstinitial:
-			mov dword[firstCell],1
-			jmp endOfCalcIJ
+	firstinitial:
+		mov dword[firstCell],1
+		jmp endOfCalcIJ
 			
-calcCord:
-	mov ebx, dword[firstCell]
-	cmp ebx, 0
-	je firstinitial
-	mov ebx, dword[WorldWidth]
-	dec ebx
-	cmp dword[i],ebx
-	je endOfLine
-	mov esi, dword[i]
-	mov edi, dword[j]
-	inc dword[i]
-	jmp endOfCalcIJ
+	calcCord:
+		mov ebx, dword[firstCell]
+		cmp ebx, 0
+		je firstinitial
+		mov ebx, dword[WorldWidth]
+		dec ebx
+		cmp dword[i],ebx
+		je endOfLine
+		mov esi, dword[i]
+		mov edi, dword[j]
+		inc dword[i]
+		jmp endOfCalcIJ
 
- endOfLine:
- 	mov esi,dword[i]
- 	mov edi,dword[j]
- 	mov dword[i],0
- 	inc dword[j]
- 	jmp endOfCalcIJ
+ 	endOfLine:
+		mov esi,dword[i]
+		mov edi,dword[j]
+		mov dword[i],0
+		inc dword[j]
+		jmp endOfCalcIJ
 
-	
 
 	bad_input:
     
