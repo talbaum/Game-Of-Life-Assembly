@@ -23,7 +23,7 @@ int sumAndCalcNewState(int n1,int n2,int n3,int n4,int n5,int n6,int n7,int n8, 
  int sum= valN1+valN2+valN3+valN4+valN5+valN6+valN7+valN8;
  myCell+=2;
  int count=checkMyStatus(valN1,valN2,valN3,valN4,valN5,valN6,valN7,valN8);
- checkThings1(sum, myCell, state[myCell]);
+
 
 
  if(state[myCell]!='0'){
