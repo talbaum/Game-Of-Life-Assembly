@@ -2,12 +2,11 @@
         extern state , WorldWidth,WorldLength, system_call
         extern resume
 
-        ;; /usr/include/asm/unistd_32.h
 sys_write:      equ   4
 stdout:         equ   1
 
 section .bss
-	statePrint:  resb (100 * 100 + 2 ) *2   ; need to check this 
+	statePrint:  resb (100 * 100 + 2 ) *2   
 	sizeOfState: resb 100* 100 +2
 
 section .data
@@ -15,86 +14,65 @@ MatrixSize: dd 0
 slashNCount: dd 0
 nextLine:
         db "" , 10 ,0 
-
-
-
 section .text
 
 printer:
 	mov ecx, state
 	mov eax, 2
  	add ecx, eax  
-    mov edi, statePrint
-    mov esi, 0
+	mov edi, statePrint
+	mov esi, 0
 
     calcMatrixSize:
     		pushad
-			mov eax, dword[WorldLength]
+		mov eax, dword[WorldLength]
 	        mov ebx, dword[WorldWidth]
 	        mul ebx
 	        mov dword[MatrixSize], eax
 	        popad
 
     zeroLoop2:
-   		 mov eax,dword[MatrixSize]
+   	mov eax,dword[MatrixSize]
         cmp esi, dword[MatrixSize]
         je doneCopy2
         
 	afterDiv:
-        inc dword[slashNCount]
+        	inc dword[slashNCount]
 		mov eax, dword[WorldWidth]
 		cmp dword[slashNCount] ,eax
 		je sleshEn2
 		jne revah2	
 
         revah2:
-        	mov dl, byte[ecx]
-        	call putNum
+            mov dl, byte[ecx]
+            call putNum
             mov ebx , edi
             mov eax, 1
             add ebx, eax    
             mov edi, ebx
-           ; mov byte[edi], ' '
-            ;mov ebx , edi
-            ;mov eax, 1
-           ; add ebx, eax
-            ;mov edi, ebx
             inc esi
- 			
- 			mov eax, 1
+ 	    mov eax, 1
             add ecx, eax       
-                 
-            jmp zeroLoop2
-   
-            
+            jmp zeroLoop2         
         sleshEn2:
             mov dword[slashNCount],0
-        	mov dl, byte[ecx]
-        	call putNum
+            mov dl, byte[ecx]
+            call putNum
             mov ebx , edi
             mov eax, 1
             add ebx, eax    
             mov edi, ebx
-           
-           ; mov byte[edi], ' '           ;	we put space at the end of every line. maybe change it
-           ; mov ebx , edi
-          ;  mov eax, 1
-           ; add ebx, eax
-           ; mov edi, ebx
 
             mov byte[edi], 10
             mov ebx , edi
             mov eax, 1
             add ebx, eax
             mov edi, ebx
-            inc esi
- 			
- 			mov eax, 1
-            add ecx, eax       
-                 
+            inc esi	
+ 	    mov eax, 1
+            add ecx, eax         
             jmp zeroLoop2
-   
-            
+	    
    doneCopy2:
         mov eax, sys_write
         mov ebx, stdout
@@ -104,27 +82,14 @@ printer:
         add edx,dword[WorldLength]
         int 80h
 
- 		;push  1
-        ;push nextLine
-        ;push  1
-        ;push  4
-        ;CALL system_call
-
         xor ebx, ebx
         call resume             ; resume scheduler
-
         jmp printer
-
-
-
-
 
         ;------------------------------------------------------------ functions & macros -----------------------------------------------------------------------;
  putNum :      
-    
-		push ebp
+	push ebp
         mov ebp, esp   
-
         cmp dl, '0' 
         je zero
         cmp dl, '1' 
@@ -145,10 +110,8 @@ printer:
         je eight
         cmp dl, '9' 
         je nine
-    
         jmp goDown
       
-        
         zero:
             mov byte[edi], '0'	 
             jmp finishedAssignment 
