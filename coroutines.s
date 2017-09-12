@@ -45,15 +45,15 @@ notSchedulerCheck:
 notScheduler:
         push ebp
         mov ebp, esp 
-		push esi                ;------------- push x-------------- 
+	push esi                ;------------- push x-------------- 
         push edi                ;------------- push y---------------
         push eax                ; save eax (on callers stack)
-		push edx
-		mov edx,0
-		mov eax,stacksz
+	push edx
+	mov edx,0
+	mov eax,stacksz
         imul ebx			    ; eax = co-routines stack offset in stacks
         pop edx
-		add eax, stacks + stacksz ; eax = top of (empty) co-routines stack
+	add eax, stacks + stacksz ; eax = top of (empty) co-routines stack
         mov [cors + ebx*4], eax ; store co-routines stack top
         pop eax                 ; restore eax (from callers stack)
 
@@ -84,7 +84,7 @@ imScheduler:
         mov eax,stacksz
         imul ebx                            ; eax = co-routines stack offset in stacks
         pop edx
-                add eax, stacks + stacksz ; eax = top of (empty) co-routines stack
+        add eax, stacks + stacksz ; eax = top of (empty) co-routines stack
         mov [cors + ebx*4], eax ; store co-routines stack top
         pop eax                 ; restore eax (from callers stack)
 
